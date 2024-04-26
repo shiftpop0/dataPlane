@@ -25,8 +25,9 @@ def netInfo(request):
     response = {}
     for info in infos:
         response[info.id] = {
-            'port_speed': info.port_speed,
-            'link_speed': info.link_speed
+            'ipAddress': info.ipAddress,
+            'mask': info.mask,
+            'arriveSpeed': info.arriveSpeed,
         }
     return JsonResponse(response)
 
@@ -62,12 +63,16 @@ def verifyList(request):
 
 
 def deviceInfo(request):
-    throughput = 100
-    filterCount = 50
-    def avgDelay():
-        return 0.1
-    avgDelay = avgDelay()
-    response = {'throughput': throughput, 'filterCount': filterCount, 'avgDelay': avgDelay}
+    try:
+        info = deviceInfoModel.objects.get(pk=1)
+    except Exception as e:
+        return HttpResponse(type(e).__name__+" "+str(e),status=500)
+    throughput = info.throughput
+    verifySpeed = info.verifySpeed
+    avgDelay = info.avgDelay
+    verifyMode = info.verifyMode
+    tableUsage = info.tableUsage
+    response = {'throughput': throughput, 'verifySpeed': verifySpeed, 'avgDelay': avgDelay, 'verifyMode': verifyMode, 'tableUsage': tableUsage}
     return JsonResponse(response)
 
 
