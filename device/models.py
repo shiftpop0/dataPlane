@@ -14,3 +14,10 @@ class deviceInfoModel(models.Model):
     verifyMode = models.BooleanField(default=False)
     tableUsage = models.FloatField(default=0.0)
 
+class portInfoModel(models.Model):
+    id = models.IntegerField(primary_key=True)
+    ipAddress = models.CharField(max_length=15)
+    mask = models.IntegerField(default=32)
+    arriveSpeed = models.IntegerField(default=0)
+    rx = models.IntegerField(default=0)
+    tx = models.IntegerField(default=0)

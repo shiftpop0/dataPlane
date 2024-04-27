@@ -9,6 +9,8 @@ urlpatterns = [
     # 被动
     path("infoSet", infoSet),
     path("netInfo", netInfo),
+    path("portInfo", portInfo),
+
     path("routeAdd", routeAdd),
     path("routeDel", routeDel),
     path("routeList", routeList),
