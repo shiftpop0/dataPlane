@@ -10,7 +10,7 @@ urlpatterns = [
     path("infoSet", infoSet),
     path("netInfo", netInfo),
     path("portInfo", portInfo),
-
+    path("verifySwitch", verifySwitch),
     path("routeAdd", routeAdd),
     path("routeDel", routeDel),
     path("routeList", routeList),

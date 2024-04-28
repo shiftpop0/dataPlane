@@ -53,6 +53,13 @@ def portInfo(request):
     #            ]
     return JsonResponse(response)
 
+def verifySwitch(request):
+    # set verify mode
+    info = deviceInfoModel.objects.first()
+    info.verifyMode = not info.verifyMode
+    info.save()
+    response = deviceInfoModel.objects.first().verifyMode
+    return JsonResponse(response, safe=False)
 
 def routeAdd(request):
     response = {'routeAdd success'}
