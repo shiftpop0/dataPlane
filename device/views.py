@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-import cmdCPU
+# import cmdCPU
 from device.models import *
 
 
@@ -53,14 +53,30 @@ def portInfo(request):
     #            ]
     return JsonResponse(response)
 
+# def verifySwitch(request):
+#     # set verify mode
+#     info = deviceInfoModel.objects.first()
+#     info.verifyMode = not info.verifyMode
+#     info.save()
+#     # cmdCPU.verify_mode_down()
+#     response = deviceInfoModel.objects.first().verifyMode
+#     return JsonResponse(response, safe=False)
+
 def verifySwitch(request):
-    # set verify mode
-    info = deviceInfoModel.objects.first()
-    info.verifyMode = not info.verifyMode
-    info.save()
-    cmdCPU.verify_mode_down()
-    response = deviceInfoModel.objects.first().verifyMode
-    return JsonResponse(response, safe=False)
+    payload = json.loads(request.body)
+    device_id = payload.get('id')
+
+    if device_id is not None:
+        try:
+            info = deviceInfoModel.objects.get(id=device_id)
+            info.verifyMode = not info.verifyMode
+            info.save()
+            response = {'verifyMode': info.verifyMode}
+            return JsonResponse(response, safe=False)
+        except deviceInfoModel.DoesNotExist:
+            return JsonResponse({'error': 'Device not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'ID not provided'}, status=400)
 
 def routeAdd(request):
     response = {'routeAdd success'}
@@ -94,16 +110,20 @@ def verifyList(request):
 
 def deviceInfo(request):
     try:
-        info = deviceInfoModel.objects.get(pk=1)
+        all_info = deviceInfoModel.objects.all()
+        response = []
+        for info in all_info:
+            response.append({
+                'id': info.id,
+                'throughput': info.throughput,
+                'verifySpeed': info.verifySpeed,
+                'avgDelay': info.avgDelay,
+                'verifyMode': info.verifyMode,
+                'tableUsage': info.tableUsage
+            })
+        return JsonResponse(response, safe=False)
     except Exception as e:
         return HttpResponse(type(e).__name__ + " " + str(e), status=500)
-    throughput = info.throughput
-    verifySpeed = info.verifySpeed
-    avgDelay = info.avgDelay
-    verifyMode = info.verifyMode
-    tableUsage = info.tableUsage
-    response = {'throughput': throughput, 'verifySpeed': verifySpeed, 'avgDelay': avgDelay, 'verifyMode': verifyMode, 'tableUsage': tableUsage}
-    return JsonResponse(response)
 
 
 def log(request):
