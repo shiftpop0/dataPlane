@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-
+import cmdCPU
 from device.models import *
 
 
@@ -58,7 +58,7 @@ def verifySwitch(request):
     info = deviceInfoModel.objects.first()
     info.verifyMode = not info.verifyMode
     info.save()
-
+    cmdCPU.verify_mode_down()
     response = deviceInfoModel.objects.first().verifyMode
     return JsonResponse(response, safe=False)
 
