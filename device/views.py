@@ -58,6 +58,7 @@ def verifySwitch(request):
     info = deviceInfoModel.objects.first()
     info.verifyMode = not info.verifyMode
     info.save()
+
     response = deviceInfoModel.objects.first().verifyMode
     return JsonResponse(response, safe=False)
 
