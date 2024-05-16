@@ -53,15 +53,6 @@ def portInfo(request):
     #            ]
     return JsonResponse(response)
 
-# def verifySwitch(request):
-#     # set verify mode
-#     info = deviceInfoModel.objects.first()
-#     info.verifyMode = not info.verifyMode
-#     info.save()
-#     # cmdCPU.verify_mode_down()
-#     response = deviceInfoModel.objects.first().verifyMode
-#     return JsonResponse(response, safe=False)
-
 def verifySwitch(request):
     payload = json.loads(request.body)
     device_id = payload.get('id')
